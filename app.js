@@ -55,7 +55,7 @@ app.use(express_1.default.json()); // Parse JSON bodies
 app.use(express_1.default.urlencoded({ extended: true })); // Parse URL-encoded bodies
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 60 * 1000,
-    max: 5, // Max 5 requests per minute
+    max: 25, // Max 5 requests per minute
 });
 app.use('/api', limiter);
 // Define a route for your API
@@ -67,10 +67,8 @@ app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0,
         const sender = requestbody.sender.toString();
         const receiver = requestbody.receiver.toString();
         const propertyNumber = requestbody.propertyNumber.toString();
-        const streetAddress = requestbody.receiver.toString();
-        const postalCode = requestbody.propertyNumber.toString();
         // Check and update using the provided variables
-        const { meetSalesCondition, postDeadlineCheck } = yield (0, checkAndUpdate_1.checkAndUpdate)(sender, receiver, propertyNumber, process.env.PROPERTY_API_KEY, streetAddress, postalCode);
+        const { meetSalesCondition, postDeadlineCheck } = yield (0, checkAndUpdate_1.checkAndUpdate)(sender, receiver, propertyNumber);
         // Send the response with the required values and status
         res.json({
             meetSalesCondition,
@@ -97,7 +95,7 @@ app.listen(port, () => {
 // readBonusInfo(
 //   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",
 //   "0xde21750cf3A76931bAAc0A91e75706e6B3bEa1c5",
-//   123456
+//   abcd
 // )
 // updateContract(
 //   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",

@@ -53,8 +53,6 @@ function readBonusInfo(sender, receiver, propertyNumber) {
         //For update
         console.log('Result:', tx);
         return tx;
-        //     const myArray = Array.isArray(executeResponse.methodResults[0].returnValue)? executeResponse.methodResults[0].returnValue : [];
-        //     return myArray
     });
 }
 exports.readBonusInfo = readBonusInfo;

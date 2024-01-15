@@ -92,17 +92,17 @@ export const abi = [
       },
       {
         "internalType": "bool",
-        "name": "propertySold",
+        "name": "atOrAbove",
         "type": "bool"
       },
       {
         "internalType": "bool",
-        "name": "haveExpectedSalesPrice",
+        "name": "atOrBelow",
         "type": "bool"
       },
       {
         "internalType": "uint256",
-        "name": "expectedSalesPrice",
+        "name": "atPrice",
         "type": "uint256"
       },
       {
@@ -138,22 +138,27 @@ export const abi = [
       },
       {
         "internalType": "uint256",
-        "name": "startDateInDays",
+        "name": "startDateInUnixSeconds",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "sellByDateInDays",
+        "name": "sellByDateInUnixSeconds",
         "type": "uint256"
       },
       {
         "internalType": "bool",
-        "name": "haveExpectedSalesPrice",
+        "name": "atOrAbove",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "atOrBelow",
         "type": "bool"
       },
       {
         "internalType": "uint256",
-        "name": "expectedSalesPrice",
+        "name": "atPrice",
         "type": "uint256"
       }
     ],
@@ -211,11 +216,6 @@ export const abi = [
         "internalType": "string",
         "name": "propertyNumber",
         "type": "string"
-      },
-      {
-        "internalType": "bool",
-        "name": "propertySold",
-        "type": "bool"
       },
       {
         "internalType": "bool",

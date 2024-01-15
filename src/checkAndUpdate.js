@@ -14,24 +14,24 @@ const checkDeadline_1 = require("./checkDeadline");
 const checkSalesConditions_1 = require("./checkSalesConditions");
 const readBonusInfo_1 = require("./readBonusInfo");
 const updateBonusInfo_1 = require("./updateBonusInfo");
-function checkAndUpdate(sender, receiver, propertyNumber, apiKey, streetAddress, postalCode) {
+function checkAndUpdate(sender, receiver, propertyNumber) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             console.log("Running Check and Update ...");
             const myArray = yield (0, readBonusInfo_1.readBonusInfo)(sender, receiver, propertyNumber);
             const stringArray = myArray.map((value) => String(value));
             // // Check to update propertySold and meetSalesCondition
-            const meetSalesCondition = yield (0, checkSalesConditions_1.checkSalesConditions)(stringArray, propertyNumber, apiKey, streetAddress, postalCode);
+            const meetSalesCondition = yield (0, checkSalesConditions_1.checkSalesConditions)(stringArray, propertyNumber);
             console.log("Meet Sales Condition", meetSalesCondition);
             // // Check to update postDeadlineCheck
             const endDate = parseInt(stringArray[4], 10);
             const postDeadlineCheck = yield (0, checkDeadline_1.checkDeadline)(endDate);
             // // Update Final Values
             if (meetSalesCondition.condition) {
-                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, true, true, postDeadlineCheck);
+                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, true, postDeadlineCheck);
             }
             else {
-                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, false, false, postDeadlineCheck);
+                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, false, postDeadlineCheck);
             }
             return { meetSalesCondition, postDeadlineCheck };
         }

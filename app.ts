@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 const limiter: RequestHandler = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 5, // Max 5 requests per minute
+  max: 25, // Max 5 requests per minute
 });
 
 app.use('/api', limiter);
@@ -38,11 +38,9 @@ app.post('/api/update-contract', async (req: Request, res: Response) => {
     const sender:string= requestbody.sender.toString();
     const receiver:string= requestbody.receiver.toString();
     const propertyNumber:string= requestbody.propertyNumber.toString();
-    const streetAddress:string= requestbody.receiver.toString();
-    const postalCode:number= requestbody.propertyNumber.toString();
 
     // Check and update using the provided variables
-    const { meetSalesCondition, postDeadlineCheck } = await checkAndUpdate(sender, receiver, propertyNumber,process.env.PROPERTY_API_KEY,streetAddress,postalCode);
+    const { meetSalesCondition, postDeadlineCheck } = await checkAndUpdate(sender, receiver, propertyNumber);
 
     // Send the response with the required values and status
     res.json({
@@ -75,7 +73,7 @@ export {app}
 // readBonusInfo(
 //   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",
 //   "0xde21750cf3A76931bAAc0A91e75706e6B3bEa1c5",
-//   123456
+//   abcd
 // )
 
 // updateContract(

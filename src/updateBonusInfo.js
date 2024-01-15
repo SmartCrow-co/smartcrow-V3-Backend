@@ -39,7 +39,7 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const PK = process.env.WALLET_PRIVATE_KEY ? process.env.WALLET_PRIVATE_KEY : "";
 const contractAddress = process.env.CONTRACT_ADDRESS ? process.env.CONTRACT_ADDRESS : "";
-function updateContract(sender, receiver, propertyNumber, propertySold, meetSalesCondition, postDeadlineCheck) {
+function updateContract(sender, receiver, propertyNumber, meetSalesCondition, postDeadlineCheck) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Updating the Contract BonusInfo ...");
         // Import Wallet
@@ -51,7 +51,7 @@ function updateContract(sender, receiver, propertyNumber, propertySold, meetSale
         console.log(contract);
         // Call method
         // Call the updateBonusInfo function
-        const tx = yield contract.updateBonusInfo(sender, receiver, propertyNumber, propertySold, meetSalesCondition, postDeadlineCheck);
+        const tx = yield contract.updateBonusInfo(sender, receiver, propertyNumber, meetSalesCondition, postDeadlineCheck);
         const receipt = yield tx.wait();
         //For update
         console.log('Transaction Hash:', tx.hash);

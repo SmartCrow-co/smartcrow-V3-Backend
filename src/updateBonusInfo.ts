@@ -6,7 +6,7 @@ dotenv.config();
 const PK =process.env.WALLET_PRIVATE_KEY?process.env.WALLET_PRIVATE_KEY:"";
 const contractAddress = process.env.CONTRACT_ADDRESS?process.env.CONTRACT_ADDRESS:"";
 
-export async function updateContract(sender: string, receiver: string, propertyNumber: string, propertySold: boolean, meetSalesCondition: boolean, postDeadlineCheck: boolean) {
+export async function updateContract(sender: string, receiver: string, propertyNumber: string, meetSalesCondition: boolean, postDeadlineCheck: boolean) {
     console.log("Updating the Contract BonusInfo ...")
     // Import Wallet
     const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
@@ -23,7 +23,6 @@ export async function updateContract(sender: string, receiver: string, propertyN
         sender, 
         receiver, 
         propertyNumber, 
-        propertySold, 
         meetSalesCondition, 
         postDeadlineCheck
         );

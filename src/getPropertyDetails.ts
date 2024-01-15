@@ -1,37 +1,27 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
+import * as dotenv from 'dotenv';
+dotenv.config();
+const API_KEY = process.env.PROPERTY_API_KEY;
 
-const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
+export async function getPropertyDetails(address: string) {
+  const url = `https://api.rentcast.io/v1/properties?address=${encodeURIComponent(address)}`;
+  console.log("API KEY", API_KEY)
+  const headers = { accept: 'application/json', 'X-Api-Key': API_KEY };
 
-export async function getPropertyDetails(
-  accessToken:any, 
-  streetAddress:string, 
-  postalCode: number, 
-  orderId:string) {
-    console.log("Fetching data from Prpomix API ...")
-        const headers = {
-            'Access-Token': accessToken,
-          };
-          
-          // Define query parameters
-          const params = {
-            OrderId: orderId,
-            StreetAddress: streetAddress,
-            PostalCode: postalCode,
-          };
-          
-          try {
-            // Make the API call using Axios
-            const response: AxiosResponse = await axios.get(apiUrl, { headers, params });
-        
-            // Extract LastSaleDate and LastSalePrice from the API response
-            const lastSaleDate: string = response.data.Data.Listing.LastSaleDate;
-            const lastSalePrice: string = response.data.Data.Listing.LastSalePrice;
-        
-            // Return the extracted values
-            return { lastSaleDate, lastSalePrice };
-          } catch (error) {
-            // Handle errors
-            console.error('Error calling API:', error);
-            throw error; // Rethrow the error for the calling code to handle
-          }
+  try {
+    const response = await axios.get(url, { headers });
+    console.log("RESPONSE >>>>>>>>>>>>..", response)
+    const json = response.data[0];
+
+    if (json) {
+      const lastSaleDate = json.lastSaleDate;
+      const lastSalePrice = json.lastSalePrice;
+      console.log(lastSaleDate,lastSalePrice);
+      return { lastSaleDate, lastSalePrice };
+    } else {
+      throw new Error('No property found for the given ID');
+    }
+  } catch (error:any) {
+    throw new Error('Error fetching property information: ' + error.message);
+  }
 }

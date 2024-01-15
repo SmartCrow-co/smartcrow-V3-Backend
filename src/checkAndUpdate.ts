@@ -6,16 +6,14 @@ export async function checkAndUpdate(
     sender:string,
     receiver:string, 
     propertyNumber:string, 
-    apiKey:any, 
-    streetAddress:string,
-    postalCode:number ){
+    ){
     try {
         console.log("Running Check and Update ...")
         const myArray = await readBonusInfo(sender, receiver, propertyNumber)
         const stringArray = myArray.map((value: any) => String(value));
         
         // // Check to update propertySold and meetSalesCondition
-        const meetSalesCondition = await checkSalesConditions(stringArray,propertyNumber, apiKey, streetAddress, postalCode);
+        const meetSalesCondition = await checkSalesConditions(stringArray,propertyNumber);
         console.log("Meet Sales Condition",meetSalesCondition)
         // // Check to update postDeadlineCheck
         const endDate = parseInt(stringArray[4],10);
@@ -23,10 +21,10 @@ export async function checkAndUpdate(
     
         // // Update Final Values
         if(meetSalesCondition.condition){
-            await updateContract(sender, receiver, propertyNumber, true, true, postDeadlineCheck);
+            await updateContract(sender, receiver, propertyNumber, true, postDeadlineCheck);
         }
         else{
-            await updateContract(sender, receiver, propertyNumber, false, false, postDeadlineCheck);
+            await updateContract(sender, receiver, propertyNumber, false, postDeadlineCheck);
         }
         return {meetSalesCondition,postDeadlineCheck}
     } catch (error:any) {
