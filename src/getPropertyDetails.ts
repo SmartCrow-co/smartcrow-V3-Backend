@@ -10,13 +10,11 @@ export async function getPropertyDetails(address: string) {
 
   try {
     const response = await axios.get(url, { headers });
-    console.log("RESPONSE >>>>>>>>>>>>..", response)
     const json = response.data[0];
 
     if (json) {
       const lastSaleDate = json.lastSaleDate;
       const lastSalePrice = json.lastSalePrice;
-      console.log(lastSaleDate,lastSalePrice);
       return { lastSaleDate, lastSalePrice };
     } else {
       throw new Error('No property found for the given ID');

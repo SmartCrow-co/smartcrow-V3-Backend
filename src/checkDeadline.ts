@@ -6,6 +6,6 @@ const currentDateObj = new Date();
 const currentDateIntegerUnixTimeInSeconds: number = Math.floor(currentDateObj.getTime() / 1000);
 
 export async function checkDeadline(endDate: number){
-    console.log("Checking Deadline ...","Current Date", currentDateObj,currentDateIntegerUnixTimeInSeconds, "End date:", endDate)
+    console.log("Checking Deadline ...","Current Date:", currentDateObj,currentDateIntegerUnixTimeInSeconds, "End date:", endDate)
     return currentDateIntegerUnixTimeInSeconds > endDate;
 }

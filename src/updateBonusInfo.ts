@@ -11,11 +11,9 @@ export async function updateContract(sender: string, receiver: string, propertyN
     // Import Wallet
     const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
     const wallet = new ethers.Wallet( PK , provider);
-    console.log(provider, wallet)
 
     // Read our ABI JSON file to create an ABIContract object
     const contract = new ethers.Contract(contractAddress, abi, wallet);
-    console.log(contract)
     
     // Call method
     // Call the updateBonusInfo function
