@@ -1,12 +1,12 @@
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 dotenv.config();
-const API_KEY = process.env.PROPERTY_API_KEY;
 
 export async function getPropertyDetails(address: string) {
+  console.log("Fetching Property details from rentcast ...")
+  console.log("API KEY", process.env.PROPERTY_API_KEY)
   const url = `https://api.rentcast.io/v1/properties?address=${encodeURIComponent(address)}`;
-  console.log("API KEY", API_KEY)
-  const headers = { accept: 'application/json', 'X-Api-Key': API_KEY };
+  const headers = { accept: 'application/json', 'X-Api-Key': process.env.PROPERTY_API_KEY };
 
   try {
     const response = await axios.get(url, { headers });
