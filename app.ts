@@ -22,12 +22,12 @@ app.use(cors({ origin: '*' }));
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
-const limiter: RequestHandler = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 25, // Max 5 requests per minute
-});
+// const limiter: RequestHandler = rateLimit({
+//   windowMs: 60 * 1000, // 1 minute
+//   max: 25, // Max 5 requests per minute
+// });
 
-app.use('/api', limiter);
+// app.use('/api', limiter);
 
 // Define a route for your API
 app.post('/api/update-contract', async (req: Request, res: Response) => {
