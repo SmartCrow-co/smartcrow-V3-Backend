@@ -9,7 +9,8 @@ const contractAddress = process.env.CONTRACT_ADDRESS?process.env.CONTRACT_ADDRES
 export async function updateContract(sender: string, receiver: string, propertyNumber: string, meetSalesCondition: boolean, postDeadlineCheck: boolean) {
     console.log("Updating the Contract BonusInfo ...")
     // Import Wallet
-    const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
+    // const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
+    const provider = new ethers.AlchemyProvider("goerli",process.env.GOERLI_API_KEY);
     const wallet = new ethers.Wallet( PK , provider);
 
     // Read our ABI JSON file to create an ABIContract object

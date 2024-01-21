@@ -1,6 +1,22 @@
 export const abi = [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_usdtToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_usdcToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_wbtcToken",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -67,12 +83,12 @@ export const abi = [
     "outputs": [
       {
         "internalType": "address",
-        "name": "Sender",
+        "name": "sender",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "Receiver",
+        "name": "receiver",
         "type": "address"
       },
       {
@@ -119,6 +135,11 @@ export const abi = [
         "internalType": "bool",
         "name": "fundsWithdrawn",
         "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -128,7 +149,7 @@ export const abi = [
     "inputs": [
       {
         "internalType": "address",
-        "name": "Receiver",
+        "name": "receiver",
         "type": "address"
       },
       {
@@ -160,9 +181,19 @@ export const abi = [
         "internalType": "uint256",
         "name": "atPrice",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bonusAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
       }
     ],
-    "name": "createSenderFund",
+    "name": "createBonusInfo",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -234,7 +265,51 @@ export const abi = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "usdcToken",
+    "outputs": [
+      {
+        "internalType": "contract ERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "usdtToken",
+    "outputs": [
+      {
+        "internalType": "contract ERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "wbtcToken",
+    "outputs": [
+      {
+        "internalType": "contract ERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "Sender",
+        "type": "address"
+      },
       {
         "internalType": "address",
         "name": "Receiver",
@@ -253,6 +328,11 @@ export const abi = [
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "Sender",
+        "type": "address"
+      },
       {
         "internalType": "address",
         "name": "Receiver",
