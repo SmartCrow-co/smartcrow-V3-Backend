@@ -45,10 +45,8 @@ function updateContract(sender, receiver, propertyNumber, meetSalesCondition, po
         // Import Wallet
         const provider = new ethers_1.ethers.AlchemyProvider("maticmum", process.env.MUMBAI_API_KEY);
         const wallet = new ethers_1.ethers.Wallet(PK, provider);
-        console.log(provider, wallet);
         // Read our ABI JSON file to create an ABIContract object
         const contract = new ethers_1.ethers.Contract(contractAddress, contract_1.abi, wallet);
-        console.log(contract);
         // Call method
         // Call the updateBonusInfo function
         const tx = yield contract.updateBonusInfo(sender, receiver, propertyNumber, meetSalesCondition, postDeadlineCheck);

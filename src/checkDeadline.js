@@ -16,7 +16,7 @@ const currentDateObj = new Date();
 const currentDateIntegerUnixTimeInSeconds = Math.floor(currentDateObj.getTime() / 1000);
 function checkDeadline(endDate) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Checking Deadline ...", "Current Date", currentDateObj, currentDateIntegerUnixTimeInSeconds, "End date:", endDate);
+        console.log("Checking Deadline ...", "Current Date:", currentDateObj, currentDateIntegerUnixTimeInSeconds, "End date:", endDate);
         return currentDateIntegerUnixTimeInSeconds > endDate;
     });
 }

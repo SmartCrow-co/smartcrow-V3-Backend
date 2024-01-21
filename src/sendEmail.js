@@ -35,31 +35,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPropertyDetails = void 0;
-const axios_1 = __importDefault(require("axios"));
+exports.sendEmail = void 0;
+const nodejs_1 = __importDefault(require("@emailjs/nodejs"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-function getPropertyDetails(address) {
+function isValidEmail(email) {
+    // Regular expression for a simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+const serviceID = process.env.EMAILJS_SERVICE_ID ? process.env.EMAILJS_SERVICE_ID : "";
+const templateID = process.env.EMAILJS_TEMPLATE_ID ? process.env.EMAILJS_TEMPLATE_ID : "";
+const emailJSPublicKey = process.env.EMAILJS_PUBLIC_KEY ? process.env.EMAILJS_PUBLIC_KEY : "";
+const emailJSPrivateKey = process.env.EMAILJS_PRIVATE_KEY ? process.env.EMAILJS_PRIVATE_KEY : "";
+function sendEmail(mailReceiver, mailMessage) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Fetching Property details from rentcast ...");
-        console.log("API KEY", process.env.PROPERTY_API_KEY);
-        const url = `https://api.rentcast.io/v1/properties?address=${encodeURIComponent(address)}`;
-        const headers = { accept: 'application/json', 'X-Api-Key': process.env.PROPERTY_API_KEY };
+        console.log("Sending Email as SmartCrow ...");
+        if (isValidEmail(mailReceiver)) {
+            console.log("Email is valid");
+        }
+        else {
+            console.log("Email is not valid");
+        }
         try {
-            const response = yield axios_1.default.get(url, { headers });
-            const json = response.data[0];
-            if (json) {
-                const lastSaleDate = json.lastSaleDate;
-                const lastSalePrice = json.lastSalePrice;
-                return { lastSaleDate, lastSalePrice };
-            }
-            else {
-                throw new Error('No property found for the given ID');
-            }
+            nodejs_1.default
+                .send(serviceID, templateID, {
+                from_name: "SmartCrow Team",
+                to_name: mailReceiver,
+                message: mailMessage,
+            }, {
+                publicKey: emailJSPublicKey,
+                privateKey: emailJSPrivateKey, // optional, highly recommended for security reasons
+            })
+                .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+            }, (err) => {
+                console.log('FAILED...', err);
+            });
         }
         catch (error) {
-            throw new Error('Error fetching property information: ' + error.message);
         }
     });
 }
-exports.getPropertyDetails = getPropertyDetails;
+exports.sendEmail = sendEmail;

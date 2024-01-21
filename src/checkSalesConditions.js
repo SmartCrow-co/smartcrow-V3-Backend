@@ -26,7 +26,7 @@ function checkSalesConditions(stringArray, propertyNumber) {
             // 2. Check if property is sold within start and end time.
             const dateObject = new Date(lastSaleDate);
             const timestamp = Math.floor(dateObject.getTime() / 1000);
-            console.log("start date, timestamp, end date", startDate, timestamp, endDate);
+            console.log("start date, timestamp(last sale date), end date", startDate, timestamp, endDate);
             if (startDate < timestamp && timestamp <= endDate) {
                 // 3. Check if agreement has atPrice
                 const atOrAbove = stringArray[5] === "true" ? true : false;

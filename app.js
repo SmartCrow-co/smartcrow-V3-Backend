@@ -40,24 +40,24 @@ exports.app = void 0;
 // Import required modules
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const checkAndUpdate_1 = require("./src/checkAndUpdate");
 // Load environment variables from .env file
 const dotenv = __importStar(require("dotenv"));
+const sendEmail_1 = require("./src/sendEmail");
 dotenv.config();
 // Create Express app
 const app = (0, express_1.default)();
 exports.app = app;
 const port = process.env.PORT || 3000;
 // Enable CORS for all routes
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ origin: '*' }));
 app.use(express_1.default.json()); // Parse JSON bodies
 app.use(express_1.default.urlencoded({ extended: true })); // Parse URL-encoded bodies
-const limiter = (0, express_rate_limit_1.default)({
-    windowMs: 60 * 1000,
-    max: 25, // Max 5 requests per minute
-});
-app.use('/api', limiter);
+// const limiter: RequestHandler = rateLimit({
+//   windowMs: 60 * 1000, // 1 minute
+//   max: 25, // Max 5 requests per minute
+// });
+// app.use('/api', limiter);
 // Define a route for your API
 app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -74,6 +74,25 @@ app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0,
             meetSalesCondition,
             postDeadlineCheck,
             status: 'Contract Updated',
+        });
+    }
+    catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}));
+app.post('/api/send-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Extract variables from the request body
+        const requestbody = req.body;
+        console.log(requestbody);
+        const email = requestbody.email.toString();
+        const message = requestbody.message.toString();
+        yield (0, sendEmail_1.sendEmail)(email, message);
+        // Send the response with the required values and status
+        res.json({
+            status: 200
         });
     }
     catch (error) {

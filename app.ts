@@ -11,6 +11,7 @@ import { checkAndUpdate } from './src/checkAndUpdate';
 
 // Load environment variables from .env file
 import * as dotenv from 'dotenv';
+import { sendEmail } from './src/sendEmail';
 dotenv.config();
 
 // Create Express app
@@ -47,6 +48,26 @@ app.post('/api/update-contract', async (req: Request, res: Response) => {
       meetSalesCondition,
       postDeadlineCheck,
       status: 'Contract Updated',
+    });
+   
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/api/send-email', async (req: Request, res: Response) => {
+  try {
+    // Extract variables from the request body
+    const requestbody = req.body;
+    console.log(requestbody)
+    const email:string= requestbody.email.toString();
+    const message:string= requestbody.message.toString();
+    await sendEmail(email,message);
+    // Send the response with the required values and status
+    res.json({
+      status: 200
     });
    
   } catch (error) {
