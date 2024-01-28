@@ -40,6 +40,9 @@ exports.app = void 0;
 // Import required modules
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const express_validator_1 = require("express-validator");
 const checkAndUpdate_1 = require("./src/checkAndUpdate");
 // Load environment variables from .env file
 const dotenv = __importStar(require("dotenv"));
@@ -49,18 +52,55 @@ dotenv.config();
 const app = (0, express_1.default)();
 exports.app = app;
 const port = process.env.PORT || 3000;
-// Enable CORS for all routes
-app.use((0, cors_1.default)({ origin: '*' }));
+// Enable CORS for frontend (Enable only 1)
+app.use((0, cors_1.default)({ origin: '*'
+    // 'https://smartcrowv3allcoins.vercel.app'
+}));
 app.use(express_1.default.json()); // Parse JSON bodies
-app.use(express_1.default.urlencoded({ extended: true })); // Parse URL-encoded bodies
-// const limiter: RequestHandler = rateLimit({
-//   windowMs: 60 * 1000, // 1 minute
-//   max: 25, // Max 5 requests per minute
-// });
-// app.use('/api', limiter);
+app.use(express_1.default.urlencoded({ extended: true, limit: '10kb' })); // Parse URL-encoded bodies
+// Helmet middleware
+app.use((0, helmet_1.default)());
+app.use(helmet_1.default.hsts({
+    // 2 years
+    maxAge: 65552000,
+    // removing the "includeSubDomains" option
+    includeSubDomains: false,
+}));
+app.use(helmet_1.default.noSniff()); // set X-Content-Type-Options header
+app.use(helmet_1.default.frameguard()); // set X-Frame-Options header
+app.use(helmet_1.default.xssFilter()); // set X-XSS-Protection header
+const limiter1 = (0, express_rate_limit_1.default)({
+    windowMs: 1440 * 60 * 1000,
+    limit: 15,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    // store: ... , // Use an external store for consistency across multiple server instances.
+});
+const limiter2 = (0, express_rate_limit_1.default)({
+    windowMs: 1440 * 60 * 1000,
+    limit: 500,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    // store: ... , // Use an external store for consistency across multiple server instances.
+});
+app.use('/api/update-contract', limiter1);
+app.use('/api/send-email', limiter2);
 // Define a route for your API
-app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/api/update-contract', [
+    // Validate and sanitize the 'sender' field
+    (0, express_validator_1.body)('sender').isLength({ min: 42 }),
+    // Validate and sanitize the 'receiver' field
+    (0, express_validator_1.body)('receiver').isLength({ min: 42 }),
+    // Validate the 'propertNumber' field
+    (0, express_validator_1.body)('propertyNumber').isLength({ min: 10 }),
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Perform the validation by checking for errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        // If there are validation errors, respond with a 400 Bad Request status
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         // Extract variables from the request body
         const requestbody = req.body;
         console.log(requestbody);
@@ -82,8 +122,19 @@ app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
-app.post('/api/send-email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/api/send-email', [
+    // Validate and sanitize the 'email' field
+    (0, express_validator_1.body)('email').isEmail().normalizeEmail(),
+    // Validate the 'message' field
+    (0, express_validator_1.body)('message').isLength({ min: 20 }),
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Perform the validation by checking for errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        // If there are validation errors, respond with a 400 Bad Request status
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         // Extract variables from the request body
         const requestbody = req.body;
         console.log(requestbody);
@@ -92,7 +143,8 @@ app.post('/api/send-email', (req, res) => __awaiter(void 0, void 0, void 0, func
         yield (0, sendEmail_1.sendEmail)(email, message);
         // Send the response with the required values and status
         res.json({
-            status: 200
+            status: 200,
+            message: "Email Sent"
         });
     }
     catch (error) {
@@ -105,22 +157,3 @@ app.post('/api/send-email', (req, res) => __awaiter(void 0, void 0, void 0, func
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-// getPropertyDetails(
-//   process.env.PROPERTY_API_KEY, 
-//   "3315 ALDRIDGE RD",
-//   95688,
-//   "3315-Aldridge-Road-VACAVILLE-CA-95688",
-//   );
-// readBonusInfo(
-//   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",
-//   "0xde21750cf3A76931bAAc0A91e75706e6B3bEa1c5",
-//   abcd
-// )
-// updateContract(
-//   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",
-//   "0xde21750cf3A76931bAAc0A91e75706e6B3bEa1c5",
-//   123456,
-//   true,
-//   true,
-//   true
-// )

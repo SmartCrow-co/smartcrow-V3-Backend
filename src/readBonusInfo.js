@@ -43,7 +43,8 @@ function readBonusInfo(sender, receiver, propertyNumber) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Reading BonusInfo from the contract ...");
         // Import Wallet
-        const provider = new ethers_1.ethers.AlchemyProvider("maticmum", process.env.MUMBAI_API_KEY);
+        // const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
+        const provider = new ethers_1.ethers.AlchemyProvider("goerli", process.env.GOERLI_API_KEY);
         const wallet = new ethers_1.ethers.Wallet(PK, provider);
         // Read our ABI JSON file to create an ABIContract object
         const contract = new ethers_1.ethers.Contract(contractAddress, contract_1.abi, wallet);

@@ -4,7 +4,6 @@ dotenv.config();
 
 export async function getPropertyDetails(address: string) {
   console.log("Fetching Property details from rentcast ...")
-  console.log("API KEY", process.env.PROPERTY_API_KEY)
   const url = `https://api.rentcast.io/v1/properties?address=${encodeURIComponent(address)}`;
   const headers = { accept: 'application/json', 'X-Api-Key': process.env.PROPERTY_API_KEY };
 
