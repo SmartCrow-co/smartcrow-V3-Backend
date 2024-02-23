@@ -40,27 +40,71 @@ exports.app = void 0;
 // Import required modules
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const express_validator_1 = require("express-validator");
 const checkAndUpdate_1 = require("./src/checkAndUpdate");
 // Load environment variables from .env file
 const dotenv = __importStar(require("dotenv"));
+const sendEmail_1 = require("./src/sendEmail");
 dotenv.config();
 // Create Express app
 const app = (0, express_1.default)();
 exports.app = app;
 const port = process.env.PORT || 3000;
-// Enable CORS for all routes
-app.use((0, cors_1.default)());
+// Enable CORS for frontend (Enable only 1)
+app.use((0, cors_1.default)({ origin: '*'
+    // 'https://smartcrowv3allcoins.vercel.app'
+}));
 app.use(express_1.default.json()); // Parse JSON bodies
-app.use(express_1.default.urlencoded({ extended: true })); // Parse URL-encoded bodies
-const limiter = (0, express_rate_limit_1.default)({
-    windowMs: 60 * 1000,
-    max: 5, // Max 5 requests per minute
+app.use(express_1.default.urlencoded({ extended: true, limit: '10kb' })); // Parse URL-encoded bodies
+// Helmet middleware
+app.use((0, helmet_1.default)());
+app.use(helmet_1.default.hsts({
+    // 2 years
+    maxAge: 65552000,
+    // removing the "includeSubDomains" option
+    includeSubDomains: false,
+}));
+app.use(helmet_1.default.noSniff()); // set X-Content-Type-Options header
+app.use(helmet_1.default.frameguard()); // set X-Frame-Options header
+app.use(helmet_1.default.xssFilter()); // set X-XSS-Protection header
+const limiter1 = (0, express_rate_limit_1.default)({
+    windowMs: 1440 * 60 * 1000,
+    limit: 15,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    // store: ... , // Use an external store for consistency across multiple server instances.
 });
-app.use('/api', limiter);
+const limiter2 = (0, express_rate_limit_1.default)({
+    windowMs: 1440 * 60 * 1000,
+    limit: 500,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    // store: ... , // Use an external store for consistency across multiple server instances.
+});
+app.use('/api/update-contract', limiter1);
+app.use('/api/send-email', limiter2);
 // Define a route for your API
-app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/api/update-contract', [
+    // Validate and sanitize the 'sender' field
+    (0, express_validator_1.body)('sender').isLength({ min: 42 }),
+    // Validate and sanitize the 'receiver' field
+    (0, express_validator_1.body)('receiver').isLength({ min: 42 }),
+    // Validate the 'propertNumber' field
+    (0, express_validator_1.body)('propertyNumber').isLength({ min: 10 }),
+    // Validate the 'propertNumber' field
+    (0, express_validator_1.body)('streetAddress').isLength({ min: 10 }),
+    // Validate the 'propertNumber' field
+    (0, express_validator_1.body)('postalCode').isInt({ min: 2 }),
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Perform the validation by checking for errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        // If there are validation errors, respond with a 400 Bad Request status
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         // Extract variables from the request body
         const requestbody = req.body;
         console.log(requestbody);
@@ -76,6 +120,37 @@ app.post('/api/update-contract', (req, res) => __awaiter(void 0, void 0, void 0,
             meetSalesCondition,
             postDeadlineCheck,
             status: 'Contract Updated',
+        });
+    }
+    catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}));
+app.post('/api/send-email', [
+    // Validate and sanitize the 'email' field
+    (0, express_validator_1.body)('email').isEmail().normalizeEmail(),
+    // Validate the 'message' field
+    (0, express_validator_1.body)('message').isLength({ min: 20 }),
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Perform the validation by checking for errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        // If there are validation errors, respond with a 400 Bad Request status
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // Extract variables from the request body
+        const requestbody = req.body;
+        console.log(requestbody);
+        const email = requestbody.email.toString();
+        const message = requestbody.message.toString();
+        yield (0, sendEmail_1.sendEmail)(email, message);
+        // Send the response with the required values and status
+        res.json({
+            status: 200,
+            message: "Email Sent"
         });
     }
     catch (error) {
