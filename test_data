@@ -1,0 +1,21 @@
+// getPropertyDetails(
+//   process.env.PROPERTY_API_KEY, 
+//   "3315 ALDRIDGE RD",
+//   95688,
+//   "3315-Aldridge-Road-VACAVILLE-CA-95688",
+//   );
+
+// readBonusInfo(
+//   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",
+//   "0xde21750cf3A76931bAAc0A91e75706e6B3bEa1c5",
+//   abcd
+// )
+
+// updateContract(
+//   "0x0557ECA5D17918EeB2c8b68C050C290b2811021f",
+//   "0xde21750cf3A76931bAAc0A91e75706e6B3bEa1c5",
+//   123456,
+//   true,
+//   true,
+//   true
+// )

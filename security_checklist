@@ -1,0 +1,74 @@
+body-parser: Middleware for parsing request bodies.
+cors: Middleware for enabling Cross-Origin Resource Sharing.
+helmet: Middleware for adding security headers.
+helmet.contentSecurityPolicy which sets the Content-Security-Policy header. This helps prevent cross-site scripting attacks among many other things.
+helmet.hsts which sets the Strict-Transport-Security header. This helps enforce secure (HTTPS) connections to the server.
+helmet.frameguard which sets the X-Frame-Options header. This provides clickjacking protection.
+
+authentication: http://passportjs.org/docs
+jwt:    https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens.
+        https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage/ 
+        https://github.com/OptimalBits/node_acl
+        https://gist.github.com/danwit/e0a7c5ad57c9ce5659d2
+        http://sailsjs.org/documentation/concepts/security 
+
+DDOS: load balancer: If it is one IP (not hundreds) then blacklist or deley response (for start look at this (ONLY 9 DOWNLOADS _ FISHY!!!!!!!!!!!! )https://www.npmjs.com/package/delayed-request 
+
+CSRF: https://www.npmjs.com/package/csrf
+
+XSS: https://www.npmjs.com/package/xss
+
+Don’t use deprecated or vulnerable versions of Express
+Express 2.x and 3.x are no longer maintained.
+
+Transport Layer Security (TLS):  to secure the connection and the data. This technology encrypts data before it is sent from the client to the server
+
+Disabling the X-Powered-By header does not prevent a sophisticated attacker from determining that an app is running Express. It may discourage a casual exploit, but there are other ways to determine an app is running Express.
+
+Use cookies securely
+express-session that replaces express.session middleware built-in to Express 3.x.
+cookie-session that replaces express.cookieSession middleware built-in to Express 3.x.
+
+Don’t use the default session cookie name
+
+Set cookie security options - secure, httpOnly, domain, path, expires
+
+Prevent brute-force attacks against authorization
+- express-rate-limiter
+- rate-limiter-flexible 
+
+Ensure your dependencies are secure
+- npm audit
+- snyk
+- SonarQube
+
+https://github.com/advisories
+
+
+
+Always filter and sanitize user input to protect against cross-site scripting (XSS) and command injection attacks.
+Defend against SQL injection attacks by using parameterized queries or prepared statements.
+Use the open-source sqlmap tool to detect SQL injection vulnerabilities in your app.
+Use the nmap and sslyze tools to test the configuration of your SSL ciphers, keys, and renegotiation as well as the validity of your certificate.
+Use safe-regex to ensure your regular expressions are not susceptible to regular expression denial of service attacks.
+
+
+Application performance monitoring(APM)
+
+Validate User Input - express-validator
+
+Use Security Linters - eslint-plugin-security
+
+SQL injection
+
+Limit Request Size - body-parser - 1mb?
+
+Monitoring and Make easy to report vulnerabilities
+
+curl http://localhost:3000/ --include
+
+npm audit
+
+snyk test
+snyk monitor
+
