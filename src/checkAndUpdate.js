@@ -25,13 +25,15 @@ function checkAndUpdate(sender, receiver, propertyNumber) {
             console.log("Meet Sales Condition", meetSalesCondition);
             // // Check to update postDeadlineCheck
             const endDate = parseInt(stringArray[4], 10);
-            const postDeadlineCheck = yield (0, checkDeadline_1.checkDeadline)(endDate);
+            const minRequestDays = parseInt(stringArray[6]);
+            const deadlineChecker = yield (0, checkDeadline_1.checkDeadline)(endDate, minRequestDays);
+            const postDeadlineCheck = deadlineChecker === true ? 1 : 2;
             // // Update Final Values
             if (meetSalesCondition.condition) {
-                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, true, postDeadlineCheck);
+                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, 1, postDeadlineCheck);
             }
             else {
-                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, false, postDeadlineCheck);
+                yield (0, updateBonusInfo_1.updateContract)(sender, receiver, propertyNumber, 2, postDeadlineCheck);
             }
             return { meetSalesCondition, postDeadlineCheck };
         }

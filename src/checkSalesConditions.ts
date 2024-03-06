@@ -20,9 +20,8 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
         if (startDate < timestamp && timestamp <= endDate){
             
             // 3. Check if agreement has atPrice
-            const atOrAbove: boolean = stringArray[5] === "true" ? true : false;
-            const atOrBelow: boolean = stringArray[6] === "true" ? true : false;
-            if(atOrAbove){
+            const atCondition: number = parseInt(stringArray[5]);
+            if(atCondition==1){
                 // 4. Check if sales price has been met at or Above given price
                 console.log("Last sales price, Expected sales price", lastSalePrice,atPrice)
                 if(parseInt(lastSalePrice) >= atPrice){
@@ -33,7 +32,7 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
                     return {condition:false,reason: "Doesn't meet sales price, should be at or above"}         
                 }
             }
-            else if(atOrBelow){
+            else if(atCondition==2){
                 // 5. Check if sales price has been met at or Below given price
                 console.log("Last sales price, Expected sales price", lastSalePrice,atPrice)
                 if(parseInt(lastSalePrice) <= atPrice){

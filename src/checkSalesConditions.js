@@ -29,9 +29,8 @@ function checkSalesConditions(stringArray, propertyNumber) {
             console.log("start date, timestamp(last sale date), end date", startDate, timestamp, endDate);
             if (startDate < timestamp && timestamp <= endDate) {
                 // 3. Check if agreement has atPrice
-                const atOrAbove = stringArray[5] === "true" ? true : false;
-                const atOrBelow = stringArray[6] === "true" ? true : false;
-                if (atOrAbove) {
+                const atCondition = parseInt(stringArray[5]);
+                if (atCondition == 1) {
                     // 4. Check if sales price has been met at or Above given price
                     console.log("Last sales price, Expected sales price", lastSalePrice, atPrice);
                     if (parseInt(lastSalePrice) >= atPrice) {
@@ -43,7 +42,7 @@ function checkSalesConditions(stringArray, propertyNumber) {
                         return { condition: false, reason: "Doesn't meet sales price, should be at or above" };
                     }
                 }
-                else if (atOrBelow) {
+                else if (atCondition == 2) {
                     // 5. Check if sales price has been met at or Below given price
                     console.log("Last sales price, Expected sales price", lastSalePrice, atPrice);
                     if (parseInt(lastSalePrice) <= atPrice) {

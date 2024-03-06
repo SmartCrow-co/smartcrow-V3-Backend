@@ -14,10 +14,17 @@ exports.checkDeadline = void 0;
 const currentDateObj = new Date();
 // Format the current date as YYYYMMDD
 const currentDateIntegerUnixTimeInSeconds = Math.floor(currentDateObj.getTime() / 1000);
-function checkDeadline(endDate) {
+function checkDeadline(endDate, minRequestDays) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Checking Deadline ...", "Current Date:", currentDateObj, currentDateIntegerUnixTimeInSeconds, "End date:", endDate);
-        return currentDateIntegerUnixTimeInSeconds > endDate;
+        let additionalDays = 0;
+        if (minRequestDays == 1) {
+            additionalDays = 2592000;
+        }
+        else {
+            additionalDays = 5184000;
+        }
+        console.log("Checking Deadline ...", "Current Date:", currentDateObj, currentDateIntegerUnixTimeInSeconds, "End date:", endDate, "Additional Days:", additionalDays);
+        return currentDateIntegerUnixTimeInSeconds > (endDate + additionalDays);
     });
 }
 exports.checkDeadline = checkDeadline;

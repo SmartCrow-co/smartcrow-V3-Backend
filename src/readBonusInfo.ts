@@ -10,7 +10,9 @@ export async function readBonusInfo(sender: string, receiver: string, propertyNu
     console.log("Reading BonusInfo from the contract ...")
     // Import Wallet
     // const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
-    const provider = new ethers.AlchemyProvider("goerli",process.env.GOERLI_API_KEY);
+    // const provider = new ethers.AlchemyProvider("goerli",process.env.GOERLI_API_KEY);
+    const provider = new ethers.JsonRpcProvider(process.env.INFURA_GOERLI_RPC_URL);
+
     const wallet = new ethers.Wallet( PK , provider);
 
     // Read our ABI JSON file to create an ABIContract object

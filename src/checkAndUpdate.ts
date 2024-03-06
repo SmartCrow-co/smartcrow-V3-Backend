@@ -17,14 +17,17 @@ export async function checkAndUpdate(
         console.log("Meet Sales Condition",meetSalesCondition)
         // // Check to update postDeadlineCheck
         const endDate = parseInt(stringArray[4],10);
-        const postDeadlineCheck = await checkDeadline(endDate);
+        const minRequestDays: number = parseInt(stringArray[6]);
+        const deadlineChecker = await checkDeadline(endDate, minRequestDays);
+        const postDeadlineCheck: number = deadlineChecker === true ? 1 : 2;
+
     
         // // Update Final Values
         if(meetSalesCondition.condition){
-            await updateContract(sender, receiver, propertyNumber, true, postDeadlineCheck);
+            await updateContract(sender, receiver, propertyNumber, 1, postDeadlineCheck);
         }
         else{
-            await updateContract(sender, receiver, propertyNumber, false, postDeadlineCheck);
+            await updateContract(sender, receiver, propertyNumber, 2, postDeadlineCheck);
         }
         return {meetSalesCondition,postDeadlineCheck}
     } catch (error:any) {

@@ -153,15 +153,15 @@ exports.abi = [
             },
             {
                 "indexed": false,
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "meetSalesCondition",
-                "type": "bool"
+                "type": "uint256"
             },
             {
                 "indexed": false,
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "postDeadlineCheck",
-                "type": "bool"
+                "type": "uint256"
             }
         ],
         "name": "BonusInfoUpdated",
@@ -269,14 +269,14 @@ exports.abi = [
                 "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrAbove",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "atCondition",
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrBelow",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "minRequestDays",
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
@@ -284,19 +284,19 @@ exports.abi = [
                 "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "meetSalesCondition",
-                "type": "bool"
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "postDeadlineCheck",
-                "type": "bool"
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "fundsWithdrawn",
-                "type": "bool"
+                "type": "uint256"
             },
             {
                 "internalType": "address",
@@ -330,14 +330,14 @@ exports.abi = [
                 "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrAbove",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "atCondition",
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrBelow",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "minRequestDays",
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
@@ -424,35 +424,7 @@ exports.abi = [
     },
     {
         "inputs": [],
-        "name": "tokenApproveDAI",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "tokenApproveUSDC",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "tokenApproveUSDT",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "tokenApproveWBTC",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "tokenApproveWETH",
+        "name": "tokenApprove",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -488,14 +460,14 @@ exports.abi = [
                 "type": "string"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "meetSalesCondition",
-                "type": "bool"
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "postDeadlineCheck",
-                "type": "bool"
+                "type": "uint256"
             }
         ],
         "name": "updateBonusInfo",
