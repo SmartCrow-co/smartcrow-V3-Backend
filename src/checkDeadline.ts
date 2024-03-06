@@ -12,5 +12,6 @@ export async function checkDeadline(endDate: number, minRequestDays: number){
     }
     else{additionalDays = 5184000}
     console.log("Checking Deadline ...","Current Date:", currentDateObj,currentDateIntegerUnixTimeInSeconds, "End date:", endDate, "Additional Days:", additionalDays)
-    return currentDateIntegerUnixTimeInSeconds > (endDate+additionalDays);
+    // return currentDateIntegerUnixTimeInSeconds > (endDate+additionalDays);
+    return currentDateIntegerUnixTimeInSeconds > (endDate);
 }
