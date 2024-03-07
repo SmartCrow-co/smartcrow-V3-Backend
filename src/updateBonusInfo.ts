@@ -11,7 +11,7 @@ export async function updateContract(sender: string, receiver: string, propertyN
     // Import Wallet
     // const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
     // const provider = new ethers.AlchemyProvider("goerli",process.env.GOERLI_API_KEY);
-    const provider = new ethers.JsonRpcProvider(process.env.INFURA_GOERLI_RPC_URL);
+    const provider = new ethers.JsonRpcProvider(process.env.POLYGON_MAINNET_RPC_URL);
     const wallet = new ethers.Wallet( PK , provider);
 
     // Read our ABI JSON file to create an ABIContract object
