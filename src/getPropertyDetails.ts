@@ -1,24 +1,40 @@
-import axios from 'axios';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import axios, { AxiosResponse } from 'axios';
+import { extractAddressAndZip } from './extractAddressAndZip';
 
-export async function getPropertyDetails(address: string) {
-  console.log("Fetching Property details from rentcast ...")
-  const url = `https://api.rentcast.io/v1/properties?address=${encodeURIComponent(address)}`;
-  const headers = { accept: 'application/json', 'X-Api-Key': process.env.PROPERTY_API_KEY };
+const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
-  try {
-    const response = await axios.get(url, { headers });
-    const json = response.data[0];
+export async function getPropertyDetails(
+  propertyNumber:string) {
+    console.log("Fetching data from Prpomix API ...")
+        const headers = {
+            'Access-Token': process.env.PROPERTY_API_KEY,
+          };
+          console.log("Formatting address for Prpomix API ...")
 
-    if (json) {
-      const lastSaleDate = json.lastSaleDate;
-      const lastSalePrice = json.lastSalePrice;
-      return { lastSaleDate, lastSalePrice };
-    } else {
-      throw new Error('No property found for the given ID');
-    }
-  } catch (error:any) {
-    throw new Error('Error fetching property information: ' + error.message);
-  }
+          // Extract Address and Zip Code
+          const [formattedAddress, address, zipCode] = extractAddressAndZip(propertyNumber);
+
+          
+          // Define query parameters
+          const params = {
+            OrderId: formattedAddress,
+            StreetAddress: address,
+            PostalCode: zipCode,
+          };
+          
+          try {
+            // Make the API call using Axios
+            const response: AxiosResponse = await axios.get(apiUrl, { headers, params });
+        
+            // Extract LastSaleDate and LastSalePrice from the API response
+            const lastSaleDate: string = response.data.Data.Listing.LastSaleDate;
+            const lastSalePrice: string = response.data.Data.Listing.LastSalePrice;
+        
+            // Return the extracted values
+            return { lastSaleDate, lastSalePrice };
+          } catch (error) {
+            // Handle errors
+            console.error('Error calling API:', error);
+            throw error; // Rethrow the error for the calling code to handle
+          }
 }
