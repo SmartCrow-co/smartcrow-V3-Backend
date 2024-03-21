@@ -45,7 +45,7 @@ function updateContract(sender, receiver, propertyNumber, meetSalesCondition, po
         // Import Wallet
         // const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
         // const provider = new ethers.AlchemyProvider("goerli",process.env.GOERLI_API_KEY);
-        const provider = new ethers_1.ethers.JsonRpcProvider(process.env.MUMBAI_RPC_URL);
+        const provider = new ethers_1.ethers.JsonRpcProvider(process.env.POLYGON_MAINNET_RPC_URL);
         const wallet = new ethers_1.ethers.Wallet(PK, provider);
         // Read our ABI JSON file to create an ABIContract object
         const contract = new ethers_1.ethers.Contract(contractAddress, contract_1.abi, wallet);

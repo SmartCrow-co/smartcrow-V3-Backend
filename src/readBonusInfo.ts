@@ -9,7 +9,7 @@ const contractAddress = process.env.CONTRACT_ADDRESS?process.env.CONTRACT_ADDRES
 export async function readBonusInfo(sender: string, receiver: string, propertyNumber: string) {
     console.log("Reading BonusInfo from the contract ...")
     // Import Wallet
-    const provider = new ethers.JsonRpcProvider(process.env.MUMBAI_RPC_URL);
+    const provider = new ethers.JsonRpcProvider(process.env.POLYGON_MAINNET_RPC_URL);
 
     const wallet = new ethers.Wallet( PK , provider);
 
