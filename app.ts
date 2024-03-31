@@ -22,7 +22,8 @@ const port = process.env.PORT || 3000;
 
 // Enable CORS for frontend (Enable only 1)
 app.use(cors({ origin: 
-'*'
+// '*'
+"https://smartcrow.xyz/"
 // 'https://smartcrowv3allcoins.vercel.app'
  }));
 app.use(express.json()); // Parse JSON bodies
