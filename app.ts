@@ -39,6 +39,8 @@ const corsOptionsDelegate = (req: Request, callback: any) => {
   }
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
+app.options('/api/update-contract', cors(corsOptionsDelegate))
+app.options('/api/send-email', cors(corsOptionsDelegate))
 
 // Helmet middleware
 app.use(helmet());
@@ -73,6 +75,7 @@ app.use('/api/update-contract', limiter1);
 app.use('/api/send-email', limiter2);
 
 // Define a route for your API
+
 app.post('/api/update-contract',cors(corsOptionsDelegate), [
   // Validate and sanitize the 'sender' field
   body('sender').isLength({ min: 42 }),
