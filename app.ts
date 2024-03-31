@@ -6,10 +6,9 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import type { RequestHandler } from 'express';
-// import rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 import { body, validationResult } from 'express-validator';
 import { checkAndUpdate } from './src/checkAndUpdate';
-
 
 // Load environment variables from .env file
 import * as dotenv from 'dotenv';
@@ -22,11 +21,11 @@ const port = process.env.PORT || 3000;
 
 // Enable CORS for frontend (Enable only 1)
 app.use(cors({ origin: 
-'*'
-// 'https://smartcrowv3allcoins.vercel.app'
+  'https://smartcrow.co'
  }));
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true, limit: '10kb' })); // Parse URL-encoded bodies
+
 
 // Helmet middleware
 app.use(helmet());
@@ -38,30 +37,31 @@ app.use(
     includeSubDomains: false,
   })
  )
-//  app.use(helmet.noSniff()); // set X-Content-Type-Options header
-//  app.use(helmet.frameguard()); // set X-Frame-Options header
-//  app.use(helmet.xssFilter()); // set X-XSS-Protection header
+ app.use(helmet.noSniff()); // set X-Content-Type-Options header
+ app.use(helmet.frameguard()); // set X-Frame-Options header
+ app.use(helmet.xssFilter()); // set X-XSS-Protection header
 
 
-// const limiter1: RequestHandler = rateLimit({
-// 	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
-// 	limit: 15, // Limit each IP to 15 requests per `window` (here, per 15 day).
-// 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-// 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-// 	// store: ... , // Use an external store for consistency across multiple server instances.
-// })
-// const limiter2: RequestHandler = rateLimit({
-// 	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
-// 	limit: 500, // Limit each IP to 500 requests per `window` (here, per 500 day).
-// 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-// 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-// 	// store: ... , // Use an external store for consistency across multiple server instances.
-// })
-// app.use('/api/update-contract', limiter1);
-// app.use('/api/send-email', limiter2);
+const limiter1: RequestHandler = rateLimit({
+	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
+	limit: 15, // Limit each IP to 15 requests per `window` (here, per 15 day).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Use an external store for consistency across multiple server instances.
+})
+const limiter2: RequestHandler = rateLimit({
+	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
+	limit: 500, // Limit each IP to 500 requests per `window` (here, per 500 day).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Use an external store for consistency across multiple server instances.
+})
+app.use('/api/update-contract', limiter1);
+app.use('/api/send-email', limiter2);
 
 // Define a route for your API
-app.post('/api/update-contract',[
+
+app.post('/api/update-contract', [
   // Validate and sanitize the 'sender' field
   body('sender').isLength({ min: 42 }),
 
