@@ -6,10 +6,12 @@ dotenv.config();
 const PK =process.env.WALLET_PRIVATE_KEY?process.env.WALLET_PRIVATE_KEY:"";
 const contractAddress = process.env.CONTRACT_ADDRESS?process.env.CONTRACT_ADDRESS:"";
 
-export async function updateContract(sender: string, receiver: string, propertyNumber: string, meetSalesCondition: boolean, postDeadlineCheck: boolean) {
+export async function updateContract(sender: string, receiver: string, propertyNumber: string, meetSalesCondition: number, postDeadlineCheck: number) {
     console.log("Updating the Contract BonusInfo ...")
     // Import Wallet
-    const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
+    // const provider = new ethers.AlchemyProvider("maticmum",process.env.MUMBAI_API_KEY);
+    // const provider = new ethers.AlchemyProvider("goerli",process.env.GOERLI_API_KEY);
+    const provider = new ethers.JsonRpcProvider(process.env.MUMBAI_RPC_URL);
     const wallet = new ethers.Wallet( PK , provider);
 
     // Read our ABI JSON file to create an ABIContract object

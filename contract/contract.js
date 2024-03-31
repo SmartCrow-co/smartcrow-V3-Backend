@@ -3,9 +3,62 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.abi = void 0;
 exports.abi = [
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_usdtToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_usdcToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_wbtcToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_daiToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_wethToken",
+                "type": "address"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "target",
+                "type": "address"
+            }
+        ],
+        "name": "AddressEmptyCode",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "AddressInsufficientBalance",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "FailedInnerCall",
+        "type": "error"
     },
     {
         "inputs": [
@@ -28,6 +81,128 @@ exports.abi = [
         ],
         "name": "OwnableUnauthorizedAccount",
         "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "SafeERC20FailedOperation",
+        "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "string",
+                "name": "propertyNumber",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "bonusAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "BonusInfoCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "string",
+                "name": "propertyNumber",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "meetSalesCondition",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "postDeadlineCheck",
+                "type": "uint256"
+            }
+        ],
+        "name": "BonusInfoUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "string",
+                "name": "propertyNumber",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "bonusAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "FundsWithdrawn",
+        "type": "event"
     },
     {
         "anonymous": false,
@@ -70,12 +245,12 @@ exports.abi = [
         "outputs": [
             {
                 "internalType": "address",
-                "name": "Sender",
+                "name": "sender",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "Receiver",
+                "name": "receiver",
                 "type": "address"
             },
             {
@@ -94,14 +269,14 @@ exports.abi = [
                 "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrAbove",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "atCondition",
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrBelow",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "minRequestDays",
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
@@ -109,19 +284,24 @@ exports.abi = [
                 "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "meetSalesCondition",
-                "type": "bool"
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "postDeadlineCheck",
-                "type": "bool"
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "fundsWithdrawn",
-                "type": "bool"
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -131,7 +311,7 @@ exports.abi = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "Receiver",
+                "name": "receiver",
                 "type": "address"
             },
             {
@@ -150,24 +330,47 @@ exports.abi = [
                 "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrAbove",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "atCondition",
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
-                "name": "atOrBelow",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "minRequestDays",
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
                 "name": "atPrice",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "bonusAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
             }
         ],
-        "name": "createSenderFund",
+        "name": "createBonusInfo",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "daiToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -184,8 +387,44 @@ exports.abi = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "propertyAddress",
+                "type": "string"
+            }
+        ],
+        "name": "payments",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "tokenApprove",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -221,14 +460,14 @@ exports.abi = [
                 "type": "string"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "meetSalesCondition",
-                "type": "bool"
+                "type": "uint256"
             },
             {
-                "internalType": "bool",
+                "internalType": "uint256",
                 "name": "postDeadlineCheck",
-                "type": "bool"
+                "type": "uint256"
             }
         ],
         "name": "updateBonusInfo",
@@ -237,7 +476,64 @@ exports.abi = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "usdcToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "usdtToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "wbtcToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "wethToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
+            {
+                "internalType": "address",
+                "name": "Sender",
+                "type": "address"
+            },
             {
                 "internalType": "address",
                 "name": "Receiver",
@@ -256,6 +552,11 @@ exports.abi = [
     },
     {
         "inputs": [
+            {
+                "internalType": "address",
+                "name": "Sender",
+                "type": "address"
+            },
             {
                 "internalType": "address",
                 "name": "Receiver",
