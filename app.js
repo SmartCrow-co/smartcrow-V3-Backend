@@ -66,9 +66,9 @@ app.use(helmet_1.default.hsts({
     // removing the "includeSubDomains" option
     includeSubDomains: false,
 }));
-//  app.use(helmet.noSniff()); // set X-Content-Type-Options header
-//  app.use(helmet.frameguard()); // set X-Frame-Options header
-//  app.use(helmet.xssFilter()); // set X-XSS-Protection header
+app.use(helmet_1.default.noSniff()); // set X-Content-Type-Options header
+app.use(helmet_1.default.frameguard()); // set X-Frame-Options header
+app.use(helmet_1.default.xssFilter()); // set X-XSS-Protection header
 // const limiter1: RequestHandler = rateLimit({
 // 	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
 // 	limit: 15, // Limit each IP to 15 requests per `window` (here, per 15 day).

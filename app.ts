@@ -38,9 +38,9 @@ app.use(
     includeSubDomains: false,
   })
  )
-//  app.use(helmet.noSniff()); // set X-Content-Type-Options header
-//  app.use(helmet.frameguard()); // set X-Frame-Options header
-//  app.use(helmet.xssFilter()); // set X-XSS-Protection header
+ app.use(helmet.noSniff()); // set X-Content-Type-Options header
+ app.use(helmet.frameguard()); // set X-Frame-Options header
+ app.use(helmet.xssFilter()); // set X-XSS-Protection header
 
 
 // const limiter1: RequestHandler = rateLimit({
