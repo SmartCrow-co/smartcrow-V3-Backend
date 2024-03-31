@@ -6,7 +6,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import type { RequestHandler } from 'express';
-// import rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 import { body, validationResult } from 'express-validator';
 import { checkAndUpdate } from './src/checkAndUpdate';
 
@@ -43,22 +43,22 @@ app.use(
  app.use(helmet.xssFilter()); // set X-XSS-Protection header
 
 
-// const limiter1: RequestHandler = rateLimit({
-// 	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
-// 	limit: 15, // Limit each IP to 15 requests per `window` (here, per 15 day).
-// 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-// 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-// 	// store: ... , // Use an external store for consistency across multiple server instances.
-// })
-// const limiter2: RequestHandler = rateLimit({
-// 	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
-// 	limit: 500, // Limit each IP to 500 requests per `window` (here, per 500 day).
-// 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-// 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-// 	// store: ... , // Use an external store for consistency across multiple server instances.
-// })
-// app.use('/api/update-contract', limiter1);
-// app.use('/api/send-email', limiter2);
+const limiter1: RequestHandler = rateLimit({
+	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
+	limit: 15, // Limit each IP to 15 requests per `window` (here, per 15 day).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Use an external store for consistency across multiple server instances.
+})
+const limiter2: RequestHandler = rateLimit({
+	windowMs: 1440 * 60 * 1000, // 1 minute X 1440 = 1 day
+	limit: 500, // Limit each IP to 500 requests per `window` (here, per 500 day).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Use an external store for consistency across multiple server instances.
+})
+app.use('/api/update-contract', limiter1);
+app.use('/api/send-email', limiter2);
 
 // Define a route for your API
 app.post('/api/update-contract',[
