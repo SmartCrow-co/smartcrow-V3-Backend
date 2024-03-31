@@ -10,7 +10,6 @@ import rateLimit from 'express-rate-limit';
 import { body, validationResult } from 'express-validator';
 import { checkAndUpdate } from './src/checkAndUpdate';
 
-
 // Load environment variables from .env file
 import * as dotenv from 'dotenv';
 import { sendEmail } from './src/sendEmail';
@@ -27,19 +26,6 @@ app.use(cors({ origin:
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true, limit: '10kb' })); // Parse URL-encoded bodies
 
-// Enable cors for single origin
-// const whitelist: string[] = ['https://smartcrow.xyz'];
-// const corsOptionsDelegate = (req: Request, callback: any) => {
-//   let corsOptions;
-//   if (whitelist.indexOf(req.header('Origin') || '') !== -1) {
-//     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-//   } else {
-//     corsOptions = { origin: false }; // disable CORS for this request
-//   }
-//   callback(null, corsOptions); // callback expects two parameters: error and options
-// };
-// app.options('/api/update-contract', cors(corsOptionsDelegate))
-// app.options('/api/send-email', cors(corsOptionsDelegate))
 
 // Helmet middleware
 app.use(helmet());

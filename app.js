@@ -53,24 +53,10 @@ const app = (0, express_1.default)();
 exports.app = app;
 const port = process.env.PORT || 3000;
 // Enable CORS for frontend (Enable only 1)
-// app.use(cors({ origin: 
-// '*'
-// // 'https://smartcrowv3allcoins.vercel.app'
-//  }));
+app.use((0, cors_1.default)({ origin: 'https://smartcrow.xyz'
+}));
 app.use(express_1.default.json()); // Parse JSON bodies
 app.use(express_1.default.urlencoded({ extended: true, limit: '10kb' })); // Parse URL-encoded bodies
-// Enable cors for single origin
-const whitelist = ['https://smartcrow.xyz'];
-const corsOptionsDelegate = (req, callback) => {
-    let corsOptions;
-    if (whitelist.indexOf(req.header('Origin') || '') !== -1) {
-        corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-    }
-    else {
-        corsOptions = { origin: false }; // disable CORS for this request
-    }
-    callback(null, corsOptions); // callback expects two parameters: error and options
-};
 // Helmet middleware
 app.use((0, helmet_1.default)());
 app.use(helmet_1.default.hsts({
@@ -99,7 +85,7 @@ const limiter2 = (0, express_rate_limit_1.default)({
 app.use('/api/update-contract', limiter1);
 app.use('/api/send-email', limiter2);
 // Define a route for your API
-app.post('/api/update-contract', (0, cors_1.default)(corsOptionsDelegate), [
+app.post('/api/update-contract', [
     // Validate and sanitize the 'sender' field
     (0, express_validator_1.body)('sender').isLength({ min: 42 }),
     // Validate and sanitize the 'receiver' field
@@ -135,7 +121,7 @@ app.post('/api/update-contract', (0, cors_1.default)(corsOptionsDelegate), [
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
-app.post('/api/send-email', (0, cors_1.default)(corsOptionsDelegate), [
+app.post('/api/send-email', [
     // Validate and sanitize the 'email' field
     (0, express_validator_1.body)('email').isEmail().normalizeEmail(),
     // Validate the 'message' field
