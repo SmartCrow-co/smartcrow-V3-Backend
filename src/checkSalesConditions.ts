@@ -23,7 +23,7 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
         const dateObject = new Date(lastSaleDate);
         const timestamp: number = Math.floor(dateObject.getTime() / 1000);
         console.log("start date, timestamp(last sale date), end date",startDate, timestamp, endDate)
-        if (startDate < timestamp && timestamp <= (endDate+additionalDays)) {
+        if (startDate < timestamp && timestamp <= endDate) {
             // 3. Check if agreement has atPrice
             const atCondition: number = parseInt(stringArray[5]);
             if(atCondition==1){
