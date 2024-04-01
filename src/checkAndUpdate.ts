@@ -13,11 +13,11 @@ export async function checkAndUpdate(
         const stringArray = myArray.map((value: any) => String(value));
         
         // // Check to update propertySold and meetSalesCondition
-        const meetSalesCondition = await checkSalesConditions(stringArray,propertyNumber);
+        const minRequestDays: number = parseInt(stringArray[6]);
+        const meetSalesCondition = await checkSalesConditions(stringArray,propertyNumber, minRequestDays);
         console.log("Meet Sales Condition",meetSalesCondition)
         // // Check to update postDeadlineCheck
         const endDate = parseInt(stringArray[4],10);
-        const minRequestDays: number = parseInt(stringArray[6]);
         const deadlineChecker = await checkDeadline(endDate, minRequestDays);
         const postDeadlineCheck: number = deadlineChecker === true ? 1 : 2;
 

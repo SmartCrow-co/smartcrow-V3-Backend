@@ -1,6 +1,6 @@
 import { getPropertyDetails } from "./getPropertyDetails";
 
-export async function checkSalesConditions(stringArray: string[], propertyNumber:string){
+export async function checkSalesConditions(stringArray: string[], propertyNumber:string, minRequestDays: number){
     console.log("Checking Sales Conditions ...")
     // Store sales details from agreement
     const atPrice:number = parseInt(stringArray[7],10);
@@ -11,14 +11,19 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
     const {lastSaleDate, lastSalePrice } = await getPropertyDetails(propertyNumber)
     console.log("CHECK INN SALES DATA",lastSaleDate, lastSalePrice);
 
+    let additionalDays = 0
+    if (minRequestDays == 1){
+        additionalDays = 2592000
+    }
+    else{additionalDays = 5184000}
+
     // 1. Check if property is sold
     if (lastSaleDate && lastSalePrice) {
         // 2. Check if property is sold within start and end time.
         const dateObject = new Date(lastSaleDate);
         const timestamp: number = Math.floor(dateObject.getTime() / 1000);
         console.log("start date, timestamp(last sale date), end date",startDate, timestamp, endDate)
-        if (startDate < timestamp && timestamp <= endDate){
-            
+        if (startDate < timestamp && timestamp <= (endDate+additionalDays)) {
             // 3. Check if agreement has atPrice
             const atCondition: number = parseInt(stringArray[5]);
             if(atCondition==1){
@@ -50,7 +55,17 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
             }      
         }else {
             // Didn't perform sales within timeframe
-            return {condition:false,reason: "Didn't perform sales within timeframe"}
+            if (minRequestDays == 1){
+                return {condition:false,reason: "Didn't perform sales within timeframe with additional 30 days lockdown period"}
+            }
+            else if(minRequestDays == 2)
+            {
+                return {condition:false,reason: "Didn't perform sales within timeframe with additional 60 days lockdown period"}
+            }
+            else {
+                return {condition:false,reason: "Didn't perform sales within timeframe"}
+            }
+            
         }
       } else {
         // No latest sales data available
