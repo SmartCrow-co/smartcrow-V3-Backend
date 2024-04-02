@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSalesConditions = void 0;
 const getPropertyDetails_1 = require("./getPropertyDetails");
-function checkSalesConditions(stringArray, propertyNumber) {
+function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Checking Sales Conditions ...");
         // Store sales details from agreement
@@ -21,6 +21,13 @@ function checkSalesConditions(stringArray, propertyNumber) {
         // Get sales data from API
         const { lastSaleDate, lastSalePrice } = yield (0, getPropertyDetails_1.getPropertyDetails)(propertyNumber);
         console.log("CHECK INN SALES DATA", lastSaleDate, lastSalePrice);
+        let additionalDays = 0;
+        if (minRequestDays == 1) {
+            additionalDays = 2592000;
+        }
+        else {
+            additionalDays = 5184000;
+        }
         // 1. Check if property is sold
         if (lastSaleDate && lastSalePrice) {
             // 2. Check if property is sold within start and end time.
@@ -61,7 +68,15 @@ function checkSalesConditions(stringArray, propertyNumber) {
             }
             else {
                 // Didn't perform sales within timeframe
-                return { condition: false, reason: "Didn't perform sales within timeframe" };
+                if (minRequestDays == 1) {
+                    return { condition: false, reason: "Didn't perform sales within timeframe with additional 30 days lockdown period" };
+                }
+                else if (minRequestDays == 2) {
+                    return { condition: false, reason: "Didn't perform sales within timeframe with additional 60 days lockdown period" };
+                }
+                else {
+                    return { condition: false, reason: "Didn't perform sales within timeframe" };
+                }
             }
         }
         else {

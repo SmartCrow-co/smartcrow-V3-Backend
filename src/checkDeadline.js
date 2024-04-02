@@ -24,8 +24,8 @@ function checkDeadline(endDate, minRequestDays) {
             additionalDays = 5184000;
         }
         console.log("Checking Deadline ...", "Current Date:", currentDateObj, currentDateIntegerUnixTimeInSeconds, "End date:", endDate, "Additional Days:", additionalDays);
-        // return currentDateIntegerUnixTimeInSeconds > (endDate+additionalDays);
-        return currentDateIntegerUnixTimeInSeconds > (endDate);
+        return currentDateIntegerUnixTimeInSeconds > (endDate + additionalDays);
+        // return currentDateIntegerUnixTimeInSeconds > (endDate);
     });
 }
 exports.checkDeadline = checkDeadline;
