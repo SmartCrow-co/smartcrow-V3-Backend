@@ -1,4 +1,6 @@
 import { getPropertyDetails } from "./getPropertyDetails";
+import { convertUnixTimestamp } from "./unixToDateConverter";
+
 
 export async function checkSalesConditions(stringArray: string[], propertyNumber:string, minRequestDays: number){
     console.log("Checking Sales Conditions ...")
@@ -16,6 +18,7 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
         additionalDays = 2592000
     }
     else{additionalDays = 5184000}
+
 
     // 1. Check if property is sold
     if (lastSaleDate && lastSalePrice) {
@@ -54,13 +57,15 @@ export async function checkSalesConditions(stringArray: string[], propertyNumber
                 return {condition:true,reason: "Meets condition without expected sales price"}
             }      
         }else {
+            const endingPeriod = convertUnixTimestamp(endDate);
+            const lockdownPeriod = convertUnixTimestamp(endDate+additionalDays);        
             // Didn't perform sales within timeframe
             if (minRequestDays == 1){
-                return {condition:false,reason: "Didn't perform sales within timeframe with additional 30 days lockdown period"}
+                return {condition:false,reason: "Didn't perform sales within timeframe: " + endingPeriod +  "Lockout Period until: " + lockdownPeriod}
             }
             else if(minRequestDays == 2)
             {
-                return {condition:false,reason: "Didn't perform sales within timeframe with additional 60 days lockdown period"}
+                return {condition:false,reason: "Didn't perform sales within timeframe: " + endingPeriod +  "Lockout Period until: " + lockdownPeriod}
             }
             else {
                 return {condition:false,reason: "Didn't perform sales within timeframe"}
