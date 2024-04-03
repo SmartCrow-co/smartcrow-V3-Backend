@@ -29,6 +29,8 @@ function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
         else {
             additionalDays = 5184000;
         }
+        const endingPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate);
+        const lockdownPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate + additionalDays);
         // 1. Check if property is sold
         if (lastSaleDate && lastSalePrice) {
             // 2. Check if property is sold within start and end time.
@@ -47,7 +49,7 @@ function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
                     }
                     else {
                         // Doesn't meet sales price
-                        return { condition: false, reason: "Doesn't meet sales price, should be at or above" };
+                        return { condition: false, reason: "Doesn't meet sales price, should be at or above" + " Lockout Period until: " + lockdownPeriod };
                     }
                 }
                 else if (atCondition == 2) {
@@ -59,7 +61,7 @@ function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
                     }
                     else {
                         // Doesn't meet sales price
-                        return { condition: false, reason: "Doesn't meet sales price, should be at or below" };
+                        return { condition: false, reason: "Doesn't meet sales price, should be at or below" + " Lockout Period until: " + lockdownPeriod };
                     }
                 }
                 else {
@@ -68,23 +70,21 @@ function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
                 }
             }
             else {
-                const endingPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate);
-                const lockdownPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate + additionalDays);
                 // Didn't perform sales within timeframe
                 if (minRequestDays == 1) {
-                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + "Lockout Period until: " + lockdownPeriod };
+                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + " Lockout Period until: " + lockdownPeriod };
                 }
                 else if (minRequestDays == 2) {
-                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + "Lockout Period until: " + lockdownPeriod };
+                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + " Lockout Period until: " + lockdownPeriod };
                 }
                 else {
-                    return { condition: false, reason: "Didn't perform sales within timeframe" };
+                    return { condition: false, reason: "Didn't perform sales within timeframe" + " Lockout Period until: " + lockdownPeriod };
                 }
             }
         }
         else {
             // No latest sales data available
-            return { condition: false, reason: "No latest sales data available" };
+            return { condition: false, reason: "No latest sales data available" + " Lockout Period until: " + lockdownPeriod };
         }
         // Check Sales time within agreement's start or end date
     });
