@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSalesConditions = void 0;
 const getPropertyDetails_1 = require("./getPropertyDetails");
+const unixToDateConverter_1 = require("./unixToDateConverter");
 function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Checking Sales Conditions ...");
@@ -67,12 +68,14 @@ function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
                 }
             }
             else {
+                const endingPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate);
+                const lockdownPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate + additionalDays);
                 // Didn't perform sales within timeframe
                 if (minRequestDays == 1) {
-                    return { condition: false, reason: "Didn't perform sales within timeframe with additional 30 days lockdown period" };
+                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + "Lockout Period until: " + lockdownPeriod };
                 }
                 else if (minRequestDays == 2) {
-                    return { condition: false, reason: "Didn't perform sales within timeframe with additional 60 days lockdown period" };
+                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + "Lockout Period until: " + lockdownPeriod };
                 }
                 else {
                     return { condition: false, reason: "Didn't perform sales within timeframe" };
