@@ -11,7 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSalesConditions = void 0;
 const getPropertyDetails_1 = require("./getPropertyDetails");
-function checkSalesConditions(stringArray, propertyNumber) {
+const unixToDateConverter_1 = require("./unixToDateConverter");
+function checkSalesConditions(stringArray, propertyNumber, minRequestDays) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Checking Sales Conditions ...");
         // Store sales details from agreement
@@ -21,6 +22,15 @@ function checkSalesConditions(stringArray, propertyNumber) {
         // Get sales data from API
         const { lastSaleDate, lastSalePrice } = yield (0, getPropertyDetails_1.getPropertyDetails)(propertyNumber);
         console.log("CHECK INN SALES DATA", lastSaleDate, lastSalePrice);
+        let additionalDays = 0;
+        if (minRequestDays == 1) {
+            additionalDays = 2592000;
+        }
+        else {
+            additionalDays = 5184000;
+        }
+        const endingPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate);
+        const lockdownPeriod = (0, unixToDateConverter_1.convertUnixTimestamp)(endDate + additionalDays);
         // 1. Check if property is sold
         if (lastSaleDate && lastSalePrice) {
             // 2. Check if property is sold within start and end time.
@@ -39,7 +49,7 @@ function checkSalesConditions(stringArray, propertyNumber) {
                     }
                     else {
                         // Doesn't meet sales price
-                        return { condition: false, reason: "Doesn't meet sales price, should be at or above" };
+                        return { condition: false, reason: "Doesn't meet sales price, should be at or above" + " Lockout Period until: " + lockdownPeriod };
                     }
                 }
                 else if (atCondition == 2) {
@@ -51,7 +61,7 @@ function checkSalesConditions(stringArray, propertyNumber) {
                     }
                     else {
                         // Doesn't meet sales price
-                        return { condition: false, reason: "Doesn't meet sales price, should be at or below" };
+                        return { condition: false, reason: "Doesn't meet sales price, should be at or below" + " Lockout Period until: " + lockdownPeriod };
                     }
                 }
                 else {
@@ -61,12 +71,20 @@ function checkSalesConditions(stringArray, propertyNumber) {
             }
             else {
                 // Didn't perform sales within timeframe
-                return { condition: false, reason: "Didn't perform sales within timeframe" };
+                if (minRequestDays == 1) {
+                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + " Lockout Period until: " + lockdownPeriod };
+                }
+                else if (minRequestDays == 2) {
+                    return { condition: false, reason: "Didn't perform sales within timeframe: " + endingPeriod + " Lockout Period until: " + lockdownPeriod };
+                }
+                else {
+                    return { condition: false, reason: "Didn't perform sales within timeframe" + " Lockout Period until: " + lockdownPeriod };
+                }
             }
         }
         else {
             // No latest sales data available
-            return { condition: false, reason: "No latest sales data available" };
+            return { condition: false, reason: "No latest sales data available" + " Lockout Period until: " + lockdownPeriod };
         }
         // Check Sales time within agreement's start or end date
     });

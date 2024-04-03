@@ -21,11 +21,11 @@ function checkAndUpdate(sender, receiver, propertyNumber) {
             const myArray = yield (0, readBonusInfo_1.readBonusInfo)(sender, receiver, propertyNumber);
             const stringArray = myArray.map((value) => String(value));
             // // Check to update propertySold and meetSalesCondition
-            const meetSalesCondition = yield (0, checkSalesConditions_1.checkSalesConditions)(stringArray, propertyNumber);
+            const minRequestDays = parseInt(stringArray[6]);
+            const meetSalesCondition = yield (0, checkSalesConditions_1.checkSalesConditions)(stringArray, propertyNumber, minRequestDays);
             console.log("Meet Sales Condition", meetSalesCondition);
             // // Check to update postDeadlineCheck
             const endDate = parseInt(stringArray[4], 10);
-            const minRequestDays = parseInt(stringArray[6]);
             const deadlineChecker = yield (0, checkDeadline_1.checkDeadline)(endDate, minRequestDays);
             const postDeadlineCheck = deadlineChecker === true ? 1 : 2;
             // // Update Final Values
